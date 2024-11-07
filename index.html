@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flower Shop</title>
+    <link rel="shortcut icon" href="https://img.icons8.com/?size=80&id=RDWRpkx9hYbO&format=png" type="image/x-icon">
+    <!--Box icons-->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<style>
+    /* Google Font*/
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+    /* Globals */
+    * {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        list-style: none;
+        text-decoration: none;
+        scroll-behavior: smooth;
+        scroll-padding: 2rem;
+    }
+
+    /* Variables */
+    :root {
+        --pink: #fd46c9;
+        --main-color: #fd4646;
+        --sec-color: #4946fd;
+        --text-color: #171427;
+        --bg-color: #fff;
+        --red-color: #1f727c;
+    }
+
+    body {
+        background-color: whitesmoke;
+        color: var(--text-color);
+    }
+
+    /* On good*/
+    /* Header */
+    .header {
+        background-color: #135a98;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    /* Logo */
+    .logo {
+        text-decoration: none;
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #333;
+    }
+
+    .logo-highlight {
+        color: rgb(239, 82, 218);
+    }
+
+    /* Navigation */
+    .nav {
+       
+        display: flex;
+        gap: 15px;
+    }
+
+    .nav-link {
+        font-size: 1.5rem;
+        text-decoration: none;
+        color: white;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: #e354d7;
+    }
+
+    /* Icons */
+    .icons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .menu-toggle {
+        display: none;
+        width: 25px;
+        cursor: pointer;
+    }
+
+    /* Cart */
+    .cart {
+        position: fixed;
+        top: 0;
+        right: 0;
+        right: -100%;
+        width: 360px;
+        height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 20px;
+        background-color: var(--bg-color);
+        box-shadow: -2px solid 4px hsla(205, 52%, 41%, 0.1);
+        border: 1px solid var(--main-color);
+        transition: 1.5s;
+    }
+
+
+    #cart-icon {
+        color: #ded6d6;
+        font-size: 1.8rem;
+        cursor: pointer;
+    }
+
+    #cart-icon:hover {
+        background-color: rgb(74, 42, 191)
+    }
+
+    
+    .cart.active {
+        right: 0;
+        transition: .5s;
+    }
+
+    .cart-title {
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-top: 2rem;
+    }
+
+    .cart-box {
+        display: grid;
+        grid-template-columns: 32% 50% 18%;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .cart-img {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        padding: 10px;
+    }
+
+    .detail-box {
+        display: grid;
+        row-gap: .5rem;
+    }
+
+    .cart-product-title {
+        font-size: 1rem;
+        text-transform: uppercase;
+    }
+
+    .cart-price {
+        font-weight: 500;
+    }
+
+    .cart-quantity {
+        border: 1px solid var(--text-color);
+        outline-color: var(--main-color);
+        width: 2.4rem;
+        text-align: center;
+        font-size: 1rem;
+    }
+
+    .cart-remove {
+        font-size: 24px;
+        color: var(--main-color);
+        cursor: pointer;
+    }
+
+    .menu-toggle {
+        display: none;
+        width: 25px;
+        cursor: pointer;
+    }
+
+
+
+
+
+    /* TOTAL */
+    .total {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1.5rem;
+        border-top: 1px solid var(--sec-color);
+    }
+
+    .total-title {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .total-price {
+        margin-left: .5rem;
+    }
+
+    .btn-buy {
+        display: flex;
+        margin: 1.5rem auto 0 auto;
+        padding: 12px 20px;
+        border: none;
+        background-color: var(--sec-color);
+        columns: var(--bg-color);
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .btn-buy:hover {
+        background-color: var(--red-color);
+    }
+
+    #cart-close {
+        position: absolute;
+        top: 1rem;
+        right: .8rem;
+        font-size: 2rem;
+        color: var(--text-color);
+        cursor: pointer;
+    }
+
+
+
+
+
+    /* Shop section */
+    .shop-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, auto));
+        gap: 1.5rem;
+    }
+
+    .add-cart {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background-color: var(--red-color);
+        color: var(--bg-color);
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .add-cart:hover {
+        background-color: hsl(256, 74%, 35%);
+    }
+
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+    }
+    .shop-container{
+        margin-left: 10px;
+        max-width: 1068px;
+        margin: auto;
+        width: 100%;  
+        padding-left: 20px; 
+    }
+
+    .shop {
+        margin-top: 2rem;
+    }
+
+    .section-title {
+        margin: -20px;
+        font-size: 1.5rem;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .product-box {
+        position: relative;
+    }
+
+    .product-box:hover {
+        padding: 10px;
+        border: 4px solid var(--red-color);
+        transition: .4s;
+    }
+
+    .product-img {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        margin-bottom: .5rem;
+    }
+
+    .product-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: .5rem;
+    }
+
+    .product-price {
+        font-weight: 500;
+    }
+
+    /* Media Queries */
+    @media (max-width: 1024px) {
+        .nav-link {
+            font-size: medium;
+        }
+
+        h2 {
+            margin-top: 20px;
+            font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        h2 {
+            margin-top: 40px;
+            text-align: center;
+            font-size: medium;
+        }
+
+        .nav {
+            display: none;
+            flex-direction: column;
+            background: rgb(17, 36, 108);
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .nav.active {
+            display: flex;
+        }
+
+        .menu-toggle {
+            display: block;
+        }
+    }
+
+    @media (max-width: 480px) {
+        h2 {
+            margin-top: 40px;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+        }
+
+        .btn-buy {
+            font-size: 0.9rem;
+        }
+    }
+
+    /* ======== Responsive and Breakpoints ====== */
+    @media(max-width: 1080px) {
+        .nav {
+            padding: 15px;
+        }
+
+        .container {
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        section {
+            padding: 3rem 0 2rem;
+        }
+
+        .shop {
+            margin-top: 2rem;
+        }
+    }
+
+    /* For Medium Device */
+    @media(max-width: 400px) {
+        .nav {
+            padding: 25px;
+        }
+
+        .logo {
+            font-size: 1rem;
+        }
+
+        .cart {
+            width: 320px;
+        }
+    }
+
+    /* For Small Device */
+    @media(max-width: 360px) {
+        .shop {
+            margin-top: 1rem;
+        }
+
+        .cart {
+            width: 280px;
+        }
+    }
+
+    .footer .box-container {
+        padding: 100px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+
+    .footer .box-container .box {
+        flex: 1 1 25rem;
+    }
+
+    .footer .box-container .box h3 {
+        font-family: 'Times New Roman', Times, serif;
+        color: #333;
+        font-size: 2.5rem;
+        padding: 1rem 0;
+    }
+
+    .footer .box-container .box a {
+        font-family: 'Times New Roman', Times, serif;
+        display: block;
+        color: #090808;
+        font-size: 1.5rem;
+        padding: 1rem 0;
+    }
+
+    .footer .box-container .box a:hover {
+        color: var(--sec-color);
+        text-decoration: underline;
+    }
+
+    .footer .box-container .box img {
+        margin-top: -20px;
+    }
+
+    /* header */
+</style>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo">
+                <b><span class="logo-highlight">Ta</span>Sunflower</b>
+            </a>
+            <nav class="nav" >
+                <a href="#slide" class="nav-link">Home</a>
+                <a href="#items" class="nav-link">Items</a>
+                <a href="#contact_us" class="nav-link">Contact Us</a>
+            </nav>
+
+            <div class="icons">
+                <i class='bx bx-shopping-bag' id="cart-icon"></i>
+                <img src="/image/menu.png" alt="Menu" class="menu-toggle">
+            </div>
+        </div>
+
+
+        <!-- Cart -->
+        <div class="cart">
+            <h2 class="cart-title">Your Cart</h2>
+            <div class="cart-content"></div>
+            <div class="total">
+                <span class="total-title">Total:</span>
+                <span class="total-price">$0</span>
+            </div>
+            <button type="button" class="btn-buy">Buy Now</button>
+            <i class='bx bxs-x-square' id="cart-close"></i>
+        </div>
+    </header>
+
+    <!--Creat Slide-->
+    <main>
+        <div class="w3-content w3-section" id="slide" style="padding: 5%;">
+            <h2 style="text-align: center;  font-size: 60px; color: rgb(173, 21, 97);"><span
+                    style="color: rgb(106, 18, 78); font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">WECOME</span>
+                <span
+                    style="color: rgb(0, 5, 100); font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">TO</span>
+                <span
+                    style="color: rgb(90, 4, 4); font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">TA</span>
+                <span
+                    style="color: rgb(71, 72, 8); font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">SUNFLOWER</span>
+            </h2>
+            <img class="mySlides" src=".//image/w1.jpg" style="width:100% ; max-height: 700px;">
+            <img class="mySlides" src="./image/w2.jpg" style="width:100% ; max-height: 700px;">
+            <img class="mySlides" src="./image/w3.jpg" style="width:100% ; max-height: 700px;">
+            <img class="mySlides" src="./image/w4.jpg" style="width:100% ; max-height: 700px;">
+            <img class="mySlides" src="./image/w5.png" style="width:100% ; max-height: 700px;">
+            <img class="mySlides" src="./image/w6.jpg" style="width:100% ; max-height: 700px;">
+            <img class="mySlides" src="./image/w8.jpg" style="width:100% ; max-height: 700px;">
+        </div>
+
+        <!--Creat style fo slde-->
+        <script>
+            var myIndex = 0;
+            carousel();
+
+            function carousel() {
+                var i;
+                var x = document.getElementsByClassName("mySlides");
+                for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                }
+                myIndex++;
+                if (myIndex > x.length) { myIndex = 1 }
+                x[myIndex - 1].style.display = "block";
+                setTimeout(carousel, 2000); // Change image every 2 seconds
+            }
+        </script>
+        <!-- End Creat style fo slde-->
+    </main>
+
+    <!-- List of table content-->
+    <!--SHOP SECTION-->
+    <section class="shop-container" id="items">
+        <h2 class="section-title"
+            style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; font-size: 40px; color: darkcyan; ">
+            Shop Products</h2>
+        <!--Content-->
+        <div class="shop-content">
+            <!--Box1-->
+            <div class="product-box" style="background-color: rgb(170, 186, 192); padding: 10px;">
+                <img src="./image/pr5.jpg" alt="" class="product-img"
+                    style="background-color: rgb(166, 187, 193); padding: 10px;">
+                <h2 class="product-title"> Flower 1</h2>
+                <span class="product-price">$14.5</span>
+                <i class='bx bx-shopping-bag add-cart'></i>
+            </div>
+            <!--Box2-->
+            <div class="product-box" style="background-color: rgb(170, 186, 192); padding: 10px;">
+                <img src="./image/pr2.jpg" alt="" class="product-img"
+                    style="background-color: rgb(166, 187, 193); padding: 10px;">
+                <h2 class="product-title"> Flower 2</h2>
+                <span class="product-price">$15.0</span>
+                <i class='bx bx-shopping-bag add-cart'></i>
+            </div>
+            <!--Box3-->
+            <div class="product-box" style="background-color: rgb(170, 186, 192); padding: 10px;">
+                <img src="./image/pr3.jpg" alt="" class="product-img"
+                    style="background-color: rgb(166, 187, 193); padding: 10px;">
+                <h2 class="product-title"> Flower 3</h2>
+                <span class="product-price">$15.5</span>
+                <i class='bx bx-shopping-bag add-cart'></i>
+            </div>
+
+            <!--Box4-->
+            <div class="product-box" style="background-color: rgb(170, 186, 192); padding: 10px;">
+                <img src="./image/pr4.jpg" alt="" class="product-img"
+                    style="background-color: rgb(166, 187, 193); padding: 10px;">
+                <h2 class="product-title">Flower 4</h2>
+                <span class="product-price">$16.0</span>
+                <i class='bx bx-shopping-bag add-cart'></i>
+            </div>
+            <!--Box5-->
+            <div class="product-box" style="background-color: rgb(170, 186, 192); padding: 10px;">
+                <img src="./image/pr11.jpg" alt="" class="product-img"
+                    style="background-color: rgb(166, 187, 193); padding: 10px;">
+                <h2 class="product-title"> Flower 5</h2>
+                <span class="product-price">$16.5</span>
+                <i class='bx bx-shopping-bag add-cart'></i>
+            </div>
+            <!--Box6-->
+            <div class="product-box" style="background-color: rgb(170, 186, 192); padding: 10px;">
+                <img src="./image/flowerpot4.jpg" alt="" class="product-img"
+                    style="background-color: rgb(166, 187, 193); padding: 10px;">
+                <h2 class="product-title"> Flower 6</h2>
+                <span class="product-price">$17.0</span>
+                <i class='bx bx-shopping-bag add-cart'></i>
+            </div>
+            <!--Box 7-->
+            <div class="product-box" style="background-color: rgb(170, 186, 192); padding: 10px;">
+                <img src="./image/pr15.jpg" alt="" class="product-img"
+                    style="background-color: rgb(166, 187, 193); padding: 10px;">
+                <h2 class="product-title"> Flower 7</h2>
+                <span class="product-price">$17.5</span>
+                <i class='bx bx-shopping-bag add-cart'></i>
+            </div>
+            <!--Box 8-->
+            <div class="product-box" style="background-color: rgb(170, 186, 192); padding: 10px;">
+                <img src="./image/pr21.jpg" alt="" class="product-img"
+                    style="background-color: rgb(166, 187, 193); padding: 10px;">
+                <h2 class="product-title"> Flower 8</h2>
+                <span class="product-price">$18.0</span>
+                <i class='bx bx-shopping-bag add-cart'></i>
+            </div>
+
+
+        </div>
+    </section>
+
+
+    <!-- Footer section start-->
+    <footer>
+        <section class="footer" id="contact_us">
+            <div class="box-container">
+                <div class="box">
+                    <h3 style="color: darkcyan;">Quick Link</h3>
+                    <a href="#">home</a>
+                    <a href="#">about</a>
+                    <a href="#">products</a>
+                    <a href="#">review</a>
+                    <a href="#">contact</a>
+                </div>
+                <div class="box">
+                    <h3 style="color: darkcyan;">Extra Link</h3>
+                    <a href="#">my account</a>
+                    <a href="#">my order</a>
+                    <a href="#">my favorite</a>
+                </div>
+                <div class="box">
+                    <h3 style="color: darkcyan;">Locations</h3>
+                    <a href="#">phnom penh</a>
+                    <a href="#">kandal</a>
+                    <a href="#">kangpong cham</a>
+                    <a href="#">seim reap</a>
+                </div>
+                <div class="box">
+                    <h3 style="color: darkcyan;">Contact Information</h3>
+                    <a href="tel:+962368323">+854-962-368-323</a>
+                    <a href="mailto:soksocheata194@gmail.com">soksocheata194@gmail.com</a>
+                    <a href="#">koh oknhatey ,island -401234</a><br>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIXtjCmzBdGkW935eu-opp-6uKZhEGXZyxAA&usqp=CAU"
+                        alt="" width="5px">
+                </div>
+            </div>
+        </section>
+    </footer>
+    <!-- Footer section end-->
+
+
+    <!--Link js-->
+    <script>
+
+        //Menu
+        const menuToggle = document.querySelector('.menu-toggle');
+        const nav = document.querySelector('.nav');
+
+        menuToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+        });
+
+        <!--Creat style fo slde-->
+
+        var myIndex = 0;
+        carousel();
+
+        function carousel() {
+            var i;
+            var x = document.getElementsByClassName("mySlides");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            myIndex++;
+            if (myIndex > x.length) { myIndex = 1 }
+            x[myIndex - 1].style.display = "block";
+            setTimeout(carousel, 2000); // Change image every 2 seconds
+        }
+        //Open and Close Cart
+        const cartIcon = document.querySelector("#cart-icon");
+        const cart = document.querySelector(".cart");
+        const closeCart = document.querySelector("#cart-close");
+
+        cartIcon.addEventListener("click", () => {
+            cart.classList.add("active");
+        });
+
+        closeCart.addEventListener("click", () => {
+            cart.classList.remove("active");
+        });
+
+        //Start with the document is ready
+        if (document.readyState == "loading") {
+            document.addEventListener('DOMContentLoaded', start);
+        } else {
+            start();
+        }
+
+        // ===== Start =======
+        function start() {
+            addEvents();
+        }
+
+        // ===== Update and Rerender =======
+        function update() {
+            addEvents();
+            updateTotal();
+        }
+
+        // ===== Add Events =======
+        function addEvents() {
+            // Remove items from cart
+            let cartRemove_btns = document.querySelectorAll('.cart-remove');
+            console.log(cartRemove_btns);
+            cartRemove_btns.forEach(btn => {
+                btn.addEventListener("click", handle_removeCartItem);
+            });
+
+            //Change item quantity
+            let cartQuantity_inputs = document.querySelectorAll('.cart-quantity');
+            cartQuantity_inputs.forEach(input => {
+                input.addEventListener("change", handle_changeItemQuantity);
+            });
+
+            //Add item to cart
+            let addCart_btns = document.querySelectorAll(".add-cart");
+            addCart_btns.forEach(btn => {
+                btn.addEventListener("click", handle_addCartItem);
+            });
+
+            // Buy Order 
+            const buy_btn = document.querySelector(".btn-buy");
+            buy_btn.addEventListener("click", handle_buyOrder);
+
+        }
+
+        //==== Handle Events Functions=====
+        let itemsAdded = []
+        function handle_addCartItem() {
+            let product = this.parentElement;
+            let title = product.querySelector(".product-title").innerHTML;
+            let price = product.querySelector(".product-price").innerHTML;
+            let imgSrc = product.querySelector(".product-img").src;
+            console.log(title, price, imgSrc);
+
+            let newToAdd = {
+                title,
+                price,
+                imgSrc,
+            };
+
+            // handle item id ready exists
+            if (itemsAdded.find(el => el.title == newToAdd.title)) {
+                alert("This Item Is Already Exist!");
+                return;
+            } else {
+                itemsAdded.push(newToAdd);
+            }
+
+            // add product to cart
+            let cartBoxElement = CartBoxComponent(title, price, imgSrc);
+            let newNode = document.createElement("div");
+            newNode.innerHTML = cartBoxElement;
+            const cartContent = cart.querySelector(".cart-content");
+            cartContent.appendChild(newNode);
+            update();
+        }
+
+        function handle_removeCartItem() {
+            this.parentElement.remove();
+            itemsAdded = itemsAdded.filter(
+                (el) =>
+                    el.title !=
+                    this.parentElement.querySelector('.cart-product-title').innerHTML
+            );
+
+            update();
+        }
+
+        function handle_changeItemQuantity() {
+            if (isNaN(this.value) || this.value < 1) {
+                this.value = 1;
+            }
+            this.value = Math.floor(this.value); //to keep it integer
+
+            update();
+        }
+
+        function handle_buyOrder() {
+            if (itemsAdded.length <= 0) {
+                alert("There is No Order to Place Yet! \n Please Make an Order first.");
+                return;
+            }
+            const cardContent = cart.querySelector(".cart-content");
+            cardContent.innerHTML = '';
+            alert("Your Order id Placed Successfully :) ");
+            itemsAdded = [];
+            update();
+        }
+
+        // ==== Update and Rerender Functions
+        function updateTotal() {
+            let cartBoxes = document.querySelectorAll(".cart-box");
+            const totalElement = cart.querySelector(".total-price");
+            let total = 0;
+            cartBoxes.forEach(cartBox => {
+                let priceElement = cartBox.querySelector(".cart-price");
+                let price = parseFloat(priceElement.innerHTML.replace("$", ""));
+                let quantity = cartBox.querySelector(".cart-quantity").value;
+                total += price * quantity;
+            });
+            //keep 2 digits
+            total = total.toFixed(2);
+            // or you can use also
+            // total = Math .round(total * 100) / 100;
+            totalElement.innerHTML = "$" + total;
+        }
+        // ===== Html Component =====
+        function CartBoxComponent(title, price, imgSrc) {
+            return `
+    <div class="cart-box">
+    <img src=${imgSrc} alt="" class="cart-img">
+        <div class="detail-box">
+            <div class="cart-product-title">${title}</div>
+            <div class="cart-price">${price}</div>
+            <input type="number" value="1" class="cart-quantity">
+        </div>
+        <!--Remove cart-->
+        <i class='bx bxs-trash-alt cart-remove'></i>
+</div>`;
+        }
+
+    </script>
+</body>
+
+</html>
